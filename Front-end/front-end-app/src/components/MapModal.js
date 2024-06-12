@@ -1,43 +1,106 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Modal, Button, Spinner } from 'react-bootstrap';
+import axios from 'axios';
 
-const MapModal = ({ show, handleClose, modalUrl, loading, handleLoaded }) => (
-  <Modal show={show} onHide={handleClose} dialogClassName="custom-modal-size">
-    <Modal.Header closeButton>
-      <Modal.Title>카카오맵 길찾기</Modal.Title>
-    </Modal.Header>
-    <Modal.Body>
-      {loading ? (
-        <div className="text-center">
-          <Spinner animation="border" role="status">
-            <span className="visually-hidden"></span>
-          </Spinner>
-        </div>
-      ) : (
-        <>
-              {console.log(`Loading iframe with URL: ${modalUrl}`)}
-        <iframe
-          src={modalUrl}
-          onLoad={() => {
-            console.log('iframe loaded successfully');
-            handleLoaded();
-          }}
-          onError={() => {
-            console.error('Failed to load the iframe content.');
-            handleLoaded(); // iframe 로딩 실패시에도 로딩 상태 해제
-          }}
-          width="140%"
-          height="700px"
-          title="map" 
-          style={{ border: 'none' }}
-        ></iframe>
-        </>
-      )}
-    </Modal.Body>
-    <Modal.Footer>
-      <Button variant="secondary" onClick={handleClose}>닫기</Button>
-    </Modal.Footer>
-  </Modal>
-);
+const { kakao } = window;
+
+const MapModal = ({ show, handleClose, modalUrl, loading, handleLoaded }) => {
+  const [map, setMap] = useState(null);
+
+  useEffect(() => {
+    if (show && modalUrl) {
+      const mapContainer = document.getElementById('modal-map');
+      const mapOption = {
+        center: new kakao.maps.LatLng(33.450701, 126.570667),
+        level: 3
+      };
+      const newMap = new kakao.maps.Map(mapContainer, mapOption);
+      setMap(newMap);
+
+      const urlParams = new URLSearchParams(modalUrl.split('?')[1]);
+      const sX = urlParams.get('sX');
+      const sY = urlParams.get('sY');
+      const eX = urlParams.get('eX');
+      const eY = urlParams.get('eY');
+
+      const startPosition = new kakao.maps.LatLng(sY, sX);
+      const endPosition = new kakao.maps.LatLng(eY, eX);
+
+      const startMarker = new kakao.maps.Marker({ position: startPosition });
+      const endMarker = new kakao.maps.Marker({ position: endPosition });
+
+      startMarker.setMap(newMap);
+      endMarker.setMap(newMap);
+
+      // 경로 데이터 가져오기
+      fetchRouteData(sX, sY, eX, eY, newMap);
+
+      newMap.setCenter(startPosition);
+      newMap.panTo(endPosition);
+      handleLoaded();
+    }
+  }, [show, modalUrl, handleLoaded]);
+
+  const fetchRouteData = async (sX, sY, eX, eY, map) => {
+    const url = `https://apis-navi.kakaomobility.com/v1/directions?origin=${sX},${sY}&destination=${eX},${eY}&priority=RECOMMEND&car_fuel=GASOLINE&car_hipass=false&alternatives=false&road_details=false`;
+
+    try {
+      const response = await axios.get(url, {
+        headers: {
+          Authorization: `KakaoAK ${process.env.REACT_APP_KAKAO_REST_API_KEY}`,
+          'Content-Type': 'application/json'
+        }
+      });
+
+      const data = response.data;
+      if (data.routes.length > 0 && data.routes[0].sections.length > 0) {
+        const sections = data.routes[0].sections[0];
+        const linePath = [];
+
+        sections.roads.forEach(road => {
+          road.vertexes.forEach((vertex, index) => {
+            if (index % 2 === 0) {
+              linePath.push(new kakao.maps.LatLng(road.vertexes[index + 1], road.vertexes[index]));
+            }
+          });
+        });
+
+        const polyline = new kakao.maps.Polyline({
+          path: linePath,
+          strokeWeight: 5,
+          strokeColor: '#000000',
+          strokeOpacity: 0.7,
+          strokeStyle: 'solid'
+        });
+
+        polyline.setMap(map);
+      }
+    } catch (error) {
+      console.error('Error fetching route data:', error);
+    }
+  };
+
+  return (
+    <Modal show={show} onHide={handleClose} dialogClassName="custom-modal-size">
+      <Modal.Header closeButton>
+        <Modal.Title>카카오맵 길찾기</Modal.Title>
+      </Modal.Header>
+      <Modal.Body>
+        {loading ? (
+          <div className="text-center">
+            <Spinner animation="border" role="status">
+              <span className="visually-hidden"></span>
+            </Spinner>
+          </div>
+        ) : (
+          <div id="modal-map" style={{ width: '100%', height: '700px' }}></div>
+        )}
+      </Modal.Body>
+      <Modal.Footer>
+        <Button variant="secondary" onClick={handleClose}>닫기</Button>
+      </Modal.Footer>
+    </Modal>
+  );
+};
 
 export default MapModal;

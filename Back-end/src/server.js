@@ -4,7 +4,6 @@ const mongoose = require("mongoose");
 const connectDB = require("./connectDB");
 
 const app = express();
-// require("dotenv").config(); // 맥 환경 변수
 require("dotenv").config({ path: "../.env" }); // 윈도우
 
 connectDB();
@@ -12,7 +11,7 @@ connectDB();
 app.use(cors());
 app.use(express.json());
 
-const smsRouter = require("./api/shelters/sms"); // 경로가 정확한지 확인
+const smsRouter = require("./api/shelters/sms");
 app.use("/sms", smsRouter);
 
 // 카카오 로그인 라우트 연결

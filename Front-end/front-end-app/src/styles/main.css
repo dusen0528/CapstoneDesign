@@ -1,0 +1,113 @@
+/* 기존 스타일은 유지 */
+
+body {
+    background-color: #f0f0f0;
+    color: #333;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    margin-top: 20px;
+}
+
+/* 네비게이션 바 */
+.navbar {
+    background-color: #333;
+    color: #fff;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar a:hover {
+    color: #ccc;
+}
+
+/* 메인 섹션 */
+.card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.card-title {
+    color: #333;
+}
+
+.map {
+    width: 100%;
+    height: 600px;
+}
+
+/* 모달 */
+.custom-modal-size .modal-content {
+    background-color: #fff;
+    border: 1px solid #ccc;
+}
+
+.custom-modal-size .modal-header {
+    background-color: #333;
+    color: #fff;
+}
+
+.custom-modal-size .modal-body {
+    background-color: #f9f9f9;
+}
+
+.custom-modal-size .modal-footer {
+    background-color: #333;
+    color: #fff;
+}
+
+/* 버튼 */
+.button, .btn {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-bottom: 10px;
+    width: 100%;
+}
+
+.button:hover, .btn:hover {
+    background-color: #555;
+}
+
+.spinner-border {
+    color: #333;
+}
+
+/* 추가된 정보 섹션 스타일 */
+.main-section .info-section {
+    background-color: #f9f9f9;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding: 20px;
+    height: 100%;
+}
+
+.info-section h2 {
+    color: #333;
+}
+
+.shelter-info {
+    display: flex;
+    flex-direction: column;
+}
+
+.shelter-detail {
+    margin-bottom: 20px;
+}
+
+.shelter-detail h3 {
+    margin-bottom: 10px;
+}
+
+.shelter-detail p {
+    margin: 5px 0;
+}
