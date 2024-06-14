@@ -26,8 +26,25 @@ const MapModal = ({ show, handleClose, modalUrl, loading, handleLoaded }) => {
       const startPosition = new kakao.maps.LatLng(sY, sX);
       const endPosition = new kakao.maps.LatLng(eY, eX);
 
-      const startMarker = new kakao.maps.Marker({ position: startPosition });
-      const endMarker = new kakao.maps.Marker({ position: endPosition });
+      const startMarkerImage = new kakao.maps.MarkerImage(
+        'https://e7.pngegg.com/pngimages/236/41/png-clipart-illustration-of-map-icon-google-map-maker-google-maps-computer-icons-map-marker-text-heart-thumbnail.png',
+        new kakao.maps.Size(32, 32),
+        { offset: new kakao.maps.Point(16, 32) }
+      );
+      const endMarkerImage = new kakao.maps.MarkerImage(
+        'https://i.namu.wiki/i/41fR4lzF612B6bqd0VnWjG8eUYNer53WWfkzxaUPhrb2_oiTqyFqvGSQlIk6XH-Tur7EqMteQC3vPFo8LuN_6Q.svg',
+        new kakao.maps.Size(32, 32),
+        { offset: new kakao.maps.Point(16, 32) }
+      );
+
+      const startMarker = new kakao.maps.Marker({
+        position: startPosition,
+        image: startMarkerImage
+      });
+      const endMarker = new kakao.maps.Marker({
+        position: endPosition,
+        image: endMarkerImage
+      });
 
       startMarker.setMap(newMap);
       endMarker.setMap(newMap);

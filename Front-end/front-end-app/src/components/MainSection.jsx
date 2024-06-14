@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
-import MapContainer from './MapContainer'; // Map 대신 MapContainer를 사용합니다.
+import Map from './Map'; // MapContainer 대신 Map을 사용합니다.
 import MapModal from './MapModal';
 import useModal from '../hooks/useModal';
 import useUserLocation from '../hooks/useUserLocation';
+import Sms from './Sms';
 import '../styles/main.css';
 
 function MainSection() {
@@ -59,16 +60,16 @@ function MainSection() {
     return (
         <div className="container mt-5 main-section">
             <div className="row">
-                <div className="col-md-8">
-                    <Card className="mb-4">
-                        <Card.Body>
+                <div className="col-md-8 d-flex flex-column">
+                    <Card className="mb-4 flex-grow-1">
+                        <Card.Body className="d-flex flex-column">
                             <Card.Title>주변 대피소</Card.Title>
-                            <MapContainer shelters={shelters} /> {/* shelters를 props로 전달 */}
+                            <Map shelters={shelters} width="100%" height="770px" /> {/* width와 height를 props로 전달 */}
                         </Card.Body>
                     </Card>
                 </div>
-                <div className="col-md-4">
-                    <div className="info-section">
+                <div className="col-md-4 d-flex flex-column">
+                    <div className="info-section flex-grow-1">
                         <h2>재난 정보 및 대피소</h2>
                         <div className="shelter-info">
                             {shelters.map((shelter, index) => (
@@ -87,6 +88,7 @@ function MainSection() {
                     </div>
                 </div>
             </div>
+            <Sms /> {/* 재난 정보를 표시하는 컴포넌트를 추가 */}
             <MapModal show={show} handleClose={handleClose} modalUrl={modalUrl} loading={loading} handleLoaded={handleLoaded} />
         </div>
     );

@@ -111,3 +111,25 @@ body {
 .shelter-detail p {
     margin: 5px 0;
 }
+
+/* 재난 정보 카드 스타일 */
+.disaster-section {
+    margin-top: 20px;
+}
+
+.disaster-card {
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-bottom: 20px;
+    padding: 20px;
+}
+
+.disaster-card .card-title {
+    color: #d9534f; /* 재난 유형을 강조하기 위해 빨간색 */
+    margin-bottom: 10px;
+}
+
+.disaster-card .card-text {
+    color: #333;
+}
